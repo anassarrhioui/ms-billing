@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  eureka:
+    image: 'eureka_billing:v1'
+    build:
+      context: 'eureka-discovery-service'
+    networks:
+      - my_bridge
+    restart: on-failure
+    ports:
+      - '8761:8761'
+
+  gateway-service:
+    image: 'gateway_billing:v1'
+    build:
+      context: 'gateway-service'
+    networks:
+      - my_bridge
+    ports:
+      - '8762:8762'
+    restart: on-failure
+    depends_on:
+      - eureka
+
+  customer-service:
+    image: 'customer-service:v1'
+    build:
+      context: 'customer-service'
+    networks:
+      - my_bridge
+    restart: on-failure
+    depends_on:
+      - eureka
+      - gateway-service
+
+
+  billing-service:
+    image: 'billing-service:v1'
+    build:
+      context: 'billing-service'
+    networks:
+      - my_bridge
+    restart: on-failure
+    depends_on:
+      - eureka
+      - gateway-service
+
+
+networks:
+  my_bridge:

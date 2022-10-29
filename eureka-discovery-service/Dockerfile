@@ -27,5 +27,6 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 EXPOSE 8761
+ENV EUREKA_NAME eureka
 
 ENTRYPOINT ["java","-cp","app:app/lib/*","me.arrhioui.eurekadiscoveryservice.EurekaDiscoveryServiceApplication"]
